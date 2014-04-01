@@ -67,12 +67,15 @@ def lookahead(iterable, *args, **kwargs):
 
     # Set the lookbehind positions to None and generate the first element.
     # This will immediately raise StopIteration in the trivial case:
-    lst = [None]*num_prev + [iterator.next()]
+    lst = [None]*num_prev + [next(iterator)]
 
     # Prime the needed lookahead values:
-    for x in xrange(num_next):
+    # i think this should use range() builtin function
+    for x in range(num_next):
         try:
-            lst.append(iterator.next())
+            #in py3, next(iterator)
+            #lst.append(iterator.next())
+            lst.append(next(iterator))
         except StopIteration:
             lst.append(None)
             num_next -= 1
@@ -84,7 +87,8 @@ def lookahead(iterable, *args, **kwargs):
 
     # Yield the last full tuple, then continue with None for each lookahead
     # position:
-    for x in xrange(num_next+1):
+    # this sould range() too
+    for x in range(num_next+1):
         yield tuple(lst)
         lst = lst[1:] + [None]
 
